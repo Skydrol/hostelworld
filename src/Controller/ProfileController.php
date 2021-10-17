@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @Route("/api")
  */
-class AuthController extends AbstractController
+class ProfileController extends AbstractController
 {
 
     private $userRepository;
@@ -51,7 +51,6 @@ class AuthController extends AbstractController
 
     /**
      * @Route("/profile", name="user.profile")
-     * @param Request $request
      * @return JsonResponse
      */
     public function profile(): JsonResponse
