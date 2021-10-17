@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fda75420-cdca-4bed-b288-516fb9566265" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AuthController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -193,7 +193,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1634414555213</updated>
-      <workItem from="1634414556366" duration="12949000" />
+      <workItem from="1634414556366" duration="15717000" />
     </task>
     <servers />
   </component>
