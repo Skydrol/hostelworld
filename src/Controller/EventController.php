@@ -18,10 +18,10 @@ class EventController extends AbstractController
      */
     public function index(): JsonResponse
     {
-        $jsonData = $this->getDataFromFile('../var/data.json');
+        $allEvents = $this->getDataFromFile('../var/data.json');
 
         return new JsonResponse([
-            'events' => $jsonData
+            'events' => $allEvents
         ], 200);
 
     }
@@ -33,22 +33,42 @@ class EventController extends AbstractController
      */
     public function search(Request $request): JsonResponse
     {
-        $jsonData = $this->getDataFromFile('../var/data.json');
+        $allEvents = $this->getDataFromFile('../var/data.json');
 
         $term = $request->query->get('term');
         $date = $request->query->get('date');
 
+        $eventsInLocation = $this->findByLocation($allEvents,$term);
+
         return new JsonResponse([
             'term' => $term,
             'date' => $date,
-            'events' => $jsonData
+            'eventsInLocation' => $eventsInLocation,
+            'events' => $allEvents
         ], 200);
 
     }
 
-    public function getDataFromFile(string $path)
+    public function getDataFromFile(string $path): array
     {
         $jsonFile = file_get_contents($path);
         return json_decode($jsonFile, true);
+    }
+
+    public function findByLocation($allEvents,string $locationTerm): array
+    {
+        $resultArray = [];
+        foreach($allEvents as $event){
+            if(preg_match("/{$locationTerm}/i", $event['city'])) {
+                array_push($resultArray, $event);
+            } elseif (preg_match("/{$locationTerm}/i", $event['country'])){
+                array_push($resultArray, $event);
+            }
+        }
+        return $resultArray;
+    }
+
+    public function filterByDate(){
+
     }
 }
