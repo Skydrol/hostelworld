@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -18,7 +18,7 @@ class EventController extends AbstractController
      */
     public function index(): JsonResponse
     {
-        $allEvents = $this->getDataFromFile('../var/data.json');
+        $allEvents = $this->getDataFromFile('../data.json');
 
         return new JsonResponse([
             'events' => $allEvents
@@ -33,17 +33,20 @@ class EventController extends AbstractController
      */
     public function search(Request $request): JsonResponse
     {
-        $allEvents = $this->getDataFromFile('../var/data.json');
+        $allEvents = $this->getDataFromFile('../data.json');
 
         $term = $request->query->get('term');
         $date = $request->query->get('date');
 
-        $eventsInLocation = $this->findByLocation($allEvents,$term);
+        $eventsFilteredByLocation = $this->findByLocation($allEvents,$term);
+
+        $eventsFilteredByLocationAndDate = $this->filterByDate($eventsFilteredByLocation, $date);
 
         return new JsonResponse([
             'term' => $term,
             'date' => $date,
-            'eventsInLocation' => $eventsInLocation,
+            'dateIsValid' => $this->validateDateString($date),
+            'eventsFiltered' => $eventsFilteredByLocationAndDate,
             'events' => $allEvents
         ], 200);
 
@@ -55,8 +58,12 @@ class EventController extends AbstractController
         return json_decode($jsonFile, true);
     }
 
-    public function findByLocation($allEvents,string $locationTerm): array
+    public function findByLocation(?array $allEvents, ?string $locationTerm): array
     {
+        if($locationTerm == null || $locationTerm == ''){
+            return $allEvents;
+        }
+
         $resultArray = [];
         foreach($allEvents as $event){
             if(preg_match("/{$locationTerm}/i", $event['city'])) {
@@ -68,7 +75,44 @@ class EventController extends AbstractController
         return $resultArray;
     }
 
-    public function filterByDate(){
+    public function filterByDate(?array $eventsFilteredByLocation, ?string $date): array
+    {
+        if($date == null || $date == ''){
+            return $eventsFilteredByLocation;
+        }
 
+        if($this->validateDateString($date) && $this->checkIfDateIsNotPast($date)){
+            $eventsFilteredByDate = [];
+
+            // To be continued...
+
+            return $eventsFilteredByLocation;
+            //return $eventsFilteredByDate;
+        }
+
+        return [
+            'error' => 'The date provided is invalid or is in the past!',
+            'dateIsValid' => $this->validateDateString($date),
+            'stringIsNotInPast' => $this->checkIfDateIsNotPast($date),
+            'date' => $date, 'now' => new DateTime()
+        ];
+
+    }
+
+    public function checkIfDateIsNotPast(?string $dateString): bool
+    {
+        date_default_timezone_set("Europe/Dublin");
+        $date = new DateTime($dateString);
+        $now = new DateTime();
+        if($date >= $now) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validateDateString($date, $format = 'Y-m-d'): bool
+    {
+        $parsedDate = DateTime::createFromFormat($format, $date);
+        return $parsedDate && $parsedDate->format($format) === $date;
     }
 }

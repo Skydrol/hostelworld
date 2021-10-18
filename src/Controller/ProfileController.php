@@ -24,7 +24,6 @@ class ProfileController extends AbstractController
         UserRepository $userRepository,
         Security $security,
         SerializerInterface $serializerInterface
-
     )
     {
         $this->userRepository = $userRepository;
@@ -41,7 +40,6 @@ class ProfileController extends AbstractController
     {
         $jsonData = json_decode($request->getContent());
         $user = $this->userRepository->create($jsonData);
-
 
         return new JsonResponse([
             'user' => $this->serializerInterface->serialize($user, 'json')
