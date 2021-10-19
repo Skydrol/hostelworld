@@ -43,11 +43,7 @@ class EventController extends AbstractController
         $eventsFilteredByLocationAndDate = $this->filterByDate($eventsFilteredByLocation, $date);
 
         return new JsonResponse([
-            'term' => $term,
-            'date' => $date,
-            'dateIsValid' => $this->validateDateString($date),
-            'eventsFiltered' => $eventsFilteredByLocationAndDate,
-            'events' => $allEvents
+            'events' => $eventsFilteredByLocationAndDate,
         ], 200);
 
     }
@@ -81,19 +77,26 @@ class EventController extends AbstractController
             return $eventsFilteredByLocation;
         }
 
-        if($this->validateDateString($date) && $this->checkIfDateIsNotPast($date)){
+        if($this->validateDate($date)){
             $eventsFilteredByDate = [];
 
-            // To be continued...
+            foreach ($eventsFilteredByLocation as $event){
 
-            return $eventsFilteredByLocation;
-            //return $eventsFilteredByDate;
+                $eventStartDate = new DateTime($event['startDate']);
+                $eventEndDate = new DateTime($event['endDate']);
+                $queryDate = new DateTime($date);
+
+                if($queryDate >= $eventStartDate && $queryDate <= $eventEndDate){
+                    array_push($eventsFilteredByDate, $event);
+                }
+
+            }
+
+            return $eventsFilteredByDate;
         }
 
         return [
             'error' => 'The date provided is invalid or is in the past!',
-            'dateIsValid' => $this->validateDateString($date),
-            'stringIsNotInPast' => $this->checkIfDateIsNotPast($date),
             'date' => $date, 'now' => new DateTime()
         ];
 
@@ -110,9 +113,23 @@ class EventController extends AbstractController
         return false;
     }
 
-    public function validateDateString($date, $format = 'Y-m-d'): bool
+    public function checkDateString($date, $format = 'Y-m-d'): bool
     {
         $parsedDate = DateTime::createFromFormat($format, $date);
         return $parsedDate && $parsedDate->format($format) === $date;
+    }
+
+    public function validateDate($date): bool
+    {
+        if($this->checkDateString($date) == false){
+            return false;
+        }
+
+        if($this->checkIfDateIsNotPast($date) == false){
+            return false;
+        }
+
+        return true;
+
     }
 }
