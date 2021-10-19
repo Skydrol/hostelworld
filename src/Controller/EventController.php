@@ -78,6 +78,7 @@ class EventController extends AbstractController
         }
 
         if($this->validateDate($date)){
+
             $eventsFilteredByDate = [];
 
             foreach ($eventsFilteredByLocation as $event){
@@ -89,7 +90,6 @@ class EventController extends AbstractController
                 if($queryDate >= $eventStartDate && $queryDate <= $eventEndDate){
                     array_push($eventsFilteredByDate, $event);
                 }
-
             }
 
             return $eventsFilteredByDate;
@@ -107,9 +107,11 @@ class EventController extends AbstractController
         date_default_timezone_set("Europe/Dublin");
         $date = new DateTime($dateString);
         $now = new DateTime();
+
         if($date >= $now) {
             return true;
         }
+
         return false;
     }
 
@@ -130,6 +132,5 @@ class EventController extends AbstractController
         }
 
         return true;
-
     }
 }
