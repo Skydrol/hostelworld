@@ -18,7 +18,8 @@ class EventController extends AbstractController
      */
     public function index(): JsonResponse
     {
-        $allEvents = $this->getDataFromFile('../data.json');
+        $projectRoot = $this->getParameter('kernel.project_dir');
+        $allEvents = $this->getDataFromFile($projectRoot.'/data.json');
 
         return new JsonResponse([
             'events' => $allEvents
@@ -33,7 +34,8 @@ class EventController extends AbstractController
      */
     public function search(Request $request): JsonResponse
     {
-        $allEvents = $this->getDataFromFile('../data.json');
+        $projectRoot = $this->getParameter('kernel.project_dir');
+        $allEvents = $this->getDataFromFile($projectRoot.'/data.json');
 
         $term = $request->query->get('term');
         $date = $request->query->get('date');
