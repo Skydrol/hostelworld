@@ -7,14 +7,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api/events")
  */
 class EventController extends AbstractController
 {
+
+
+
+
     /**
-     * @Route("/all", name="event")
+     * @Route("/all", name="event", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns all events",
+     *     @OA\JsonContent(type="array", description="returns all events")
+     * )
+     * @OA\Tag(name="events")
+     * @Security(name="Bearer")
      */
     public function index(): JsonResponse
     {
@@ -28,7 +42,7 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/search", name="search")
+     * @Route("/search", name="search", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */

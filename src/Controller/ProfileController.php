@@ -32,7 +32,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="user.register")
+     * @Route("/register", name="user.register", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -48,7 +48,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/profile", name="user.profile")
+     * @Route("/profile", name="user.profile", methods={"GET"})
      * @return JsonResponse
      */
     public function profile(): JsonResponse
