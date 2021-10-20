@@ -49,6 +49,15 @@ If you want to know the routes you can use this command:
 php bin/console debug:router
 ```
 
+## Run the server
+```bash
+symfony server:start 
+```
+or
+```bash
+php bin/console server:start 
+```
+
 The main routes are:
 
 | Name | Method | Route | Authenticated | Request Sample |
