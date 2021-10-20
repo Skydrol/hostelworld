@@ -25,6 +25,17 @@ class EventControllerTest extends ApiTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
+    public function testSearch(): void
+    {
+        $params = ['headers' => ['authorization' => 'Bearer '.$this->getToken()]];
+        $term = 'ca';
+        $date = '2021-10-20';
+
+        static::createClient()->request('GET', '/api/events/search?term='.$term.'&date='.$date,$params);
+
+        $this->assertResponseStatusCodeSame(200);
+    }
+
     /**
      * Use other credentials if needed.
      * @param array $body

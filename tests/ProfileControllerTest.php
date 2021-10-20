@@ -50,6 +50,15 @@ class ProfileControllerTest extends ApiTestCase
 
     }
 
+    public function testProfile(): void
+    {
+        $params = ['headers' => ['authorization' => 'Bearer '.$this->getToken()]];
+
+        static::createClient()->request('GET', '/api/profile',$params);
+
+        $this->assertResponseStatusCodeSame(200);
+    }
+
 
     /**
      * Use other credentials if needed.
