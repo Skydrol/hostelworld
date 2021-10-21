@@ -17,9 +17,6 @@ use OpenApi\Annotations as OA;
 class EventController extends AbstractController
 {
 
-
-
-
     /**
      * @Route("/all", name="event", methods={"GET"})
      * @OA\Response(
